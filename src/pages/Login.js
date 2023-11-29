@@ -7,6 +7,8 @@ import {
 } from "firebase/auth";
 import { fireDb, app } from "../firebaseConfig";
 import { addDoc, collection, getDoc, doc } from "firebase/firestore";
+import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -22,15 +24,17 @@ const Login = () => {
             "duxgram-lite-user",
             JSON.stringify({ ...user.data(), id: user.id })
           );
+          toast.success("Login Successful");
         });
       })
       .catch((error) => {
-        console.log(error);
+        toast.error("Login Failed");
       });
   };
 
   return (
     <div className="h-screen flex justify-between flex-col overflow-hidden">
+      {/* <Loader /> */}
       {/* top corner */}
       <div className="flex justify-start">
         <div className="h-40 bg-primary w-96 transform -skew-x-[25deg] -ml-10 flex justify-center items-center">
