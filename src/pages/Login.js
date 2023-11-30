@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { fireDb, app } from "../firebaseConfig";
-import { addDoc, collection, getDoc, doc } from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { loading } = useSelector((store) => store);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const login = async () => {
+    dispatch({ type: "showLoading" });
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -26,15 +27,18 @@ const Login = () => {
           );
           toast.success("Login Successful");
         });
+        dispatch({ type: "hideLoading" });
+        navigate("/");
       })
       .catch((error) => {
         toast.error("Login Failed");
+        dispatch({ type: "hideLoading" });
       });
   };
 
   return (
     <div className="h-screen flex justify-between flex-col overflow-hidden">
-      {/* <Loader /> */}
+      {loading && <Loader />}
       {/* top corner */}
       <div className="flex justify-start">
         <div className="h-40 bg-primary w-96 transform -skew-x-[25deg] -ml-10 flex justify-center items-center">
