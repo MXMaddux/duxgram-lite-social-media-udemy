@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { fireDb, app } from "../firebaseConfig";
@@ -35,6 +35,12 @@ const Login = () => {
         dispatch({ type: "hideLoading" });
       });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("duxgram-lite-user")) {
+      navigate("/");
+    }
+  });
 
   return (
     <div className="h-screen flex justify-between flex-col overflow-hidden">

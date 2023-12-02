@@ -29,8 +29,8 @@ function Register() {
         console.log(userData);
         setDoc(doc(fireDb, "users", user.uid), userData);
         dispatch({ type: "hideLoading" });
-        toast.success("Registarion Successfull");
-        navigate("/login");
+        toast.success("Registration Successfull");
+        navigate("/");
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -39,7 +39,7 @@ function Register() {
       });
   };
   useEffect(() => {
-    if (localStorage.getItem("sheygram-lite-user")) {
+    if (localStorage.getItem("duxgram-lite-user")) {
       navigate("/");
     }
   });
@@ -65,7 +65,7 @@ function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="email"
-            className="border border-gray-600 h-10 rounded-sm focus:border-gray-500 pl-5 bg-transparent text-gray-400"
+            className="border border-gray-600 h-10 rounded-sm focus:border-gray-600 pl-5 bg-transparent text-gray-400"
           />
           <input
             type="password"

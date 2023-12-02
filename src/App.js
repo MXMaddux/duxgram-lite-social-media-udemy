@@ -1,6 +1,11 @@
 import logo from "./logo.svg";
 import "./index.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -14,8 +19,22 @@ function App() {
       <ToastContainer />
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/addpost" element={<AddPost />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/addpost"
+            element={
+              <ProtectedRoute>
+                <AddPost />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
@@ -23,5 +42,13 @@ function App() {
     </div>
   );
 }
+
+const ProtectedRoute = ({ children }) => {
+  if (localStorage.getItem("duxgram-lite-user")) {
+    return children;
+  } else {
+    return <Navigate to="/login" />;
+  }
+};
 
 export default App;
