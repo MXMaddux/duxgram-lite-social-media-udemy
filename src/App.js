@@ -1,54 +1,97 @@
-import logo from "./logo.svg";
 import "./index.css";
 import {
-  BrowserRouter as Router,
-  Routes,
+  BrowserRouter,
   Route,
+  Routes,
+  Redirect,
   Navigate,
 } from "react-router-dom";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Home from "./pages/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddPost from "./pages/AddPost";
+import PostDesc from "./pages/PostDesc";
+import SharePost from "./pages/SharePost";
+import Shares from "./pages/Shares";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
     <div className="App">
       <ToastContainer />
-      <Router>
+      <BrowserRouter>
         <Routes>
           <Route
             path="/"
             element={
-              <ProtectedRoute>
+              <ProtectedRouted>
                 <Home />
-              </ProtectedRoute>
+              </ProtectedRouted>
+            }
+          />
+          <Route
+            path="/sharepost/:id"
+            element={
+              <ProtectedRouted>
+                <SharePost />
+              </ProtectedRouted>
+            }
+          />
+          <Route
+            path="/shares"
+            element={
+              <ProtectedRouted>
+                <Shares />
+              </ProtectedRouted>
+            }
+          />
+          <Route
+            path="/profile/:id"
+            element={
+              <ProtectedRouted>
+                <Profile />
+              </ProtectedRouted>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRouted>
+                <Home />
+              </ProtectedRouted>
             }
           />
           <Route
             path="/addpost"
             element={
-              <ProtectedRoute>
+              <ProtectedRouted>
                 <AddPost />
-              </ProtectedRoute>
+              </ProtectedRouted>
+            }
+          />
+          <Route
+            path="/post/:id"
+            element={
+              <ProtectedRouted>
+                <PostDesc />
+              </ProtectedRouted>
             }
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </div>
   );
 }
 
-const ProtectedRoute = ({ children }) => {
+function ProtectedRouted({ children }) {
   if (localStorage.getItem("duxgram-lite-user")) {
     return children;
   } else {
     return <Navigate to="/login" />;
   }
-};
-
+}
 export default App;

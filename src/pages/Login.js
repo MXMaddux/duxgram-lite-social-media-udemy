@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { fireDb, app } from "../firebaseConfig";
-import { getDoc, doc } from "firebase/firestore";
-import Loader from "../components/Loader";
+import { doc, getDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import Loader from "../components/Loader";
+import { app, fireDb } from "../firebaseConfig";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function Login() {
   const { loading } = useSelector((store) => store);
   const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
-  const login = async () => {
+  const login = () => {
     dispatch({ type: "showLoading" });
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, password)
@@ -25,77 +24,77 @@ const Login = () => {
             "duxgram-lite-user",
             JSON.stringify({ ...user.data(), id: user.id })
           );
-          toast.success("Login Successful");
+          navigate("/");
+          toast.success("Login Successfull");
         });
         dispatch({ type: "hideLoading" });
-        navigate("/");
       })
       .catch((error) => {
         toast.error("Login Failed");
         dispatch({ type: "hideLoading" });
       });
   };
-
   useEffect(() => {
     if (localStorage.getItem("duxgram-lite-user")) {
       navigate("/");
     }
   });
-
   return (
-    <div className="h-screen flex justify-between flex-col overflow-hidden">
+    <div className="h-screen flex justify-between flex-col overflow-x-hidden">
       {loading && <Loader />}
       {/* top corner */}
       <div className="flex justify-start">
-        <div className="h-40 bg-primary w-96 transform -skew-x-[25deg] -ml-10 flex justify-center items-center">
-          <h1 className="text-white text-6xl text-center font-semibold skew-x-[25deg]">
+        <div className="h-40 bg-primary w-96 transform -skew-x-[25deg] -ml-10 flex items-center justify-center">
+          <h1 className="text-center text-6xl font-semibold skew-x-[25deg] text-white">
             DUX
           </h1>
         </div>
       </div>
+
       {/* form */}
       <div className="flex justify-center">
         <div className="w-[420px] flex flex-col space-y-5 card p-10">
-          <h1 className="text-4xl text-primary font-semibold">Get---IN</h1>
+          <h1 className="text-4xl text-primary font-semibold">Get---In</h1>
           <hr />
           <input
-            type="email"
-            className="border border-gray-300 h-10 rounded-sm focus:border-gray-500 pl-5"
-            placeholder="email..."
+            type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="email"
+            className="border border-gray-300 h-10 rounded-sm focus:border-gray-500 pl-5"
           />
           <input
             type="password"
-            className="border border-gray-300 h-10 rounded-sm focus:border-gray-500 pl-5"
-            placeholder="password..."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
+            className="border border-gray-300 h-10 rounded-sm focus:border-gray-500 pl-5"
           />
           <div className="flex justify-end">
             <button
-              onClick={login}
               className="bg-primary h-10 rounded-sm text-white px-10"
+              onClick={login}
             >
               LOGIN
             </button>
           </div>
           <hr />
-          <Link to="/register" className="text-[13px] text-primary">
-            NOT REGISTERED YET? CLICK HERE TO REGISTER.
+          <Link to="/register" className="text-[14px] text-primary">
+            NOT YET REGISTED ? CLICK HERE TO REGISTER
           </Link>
         </div>
       </div>
+
       {/* bottom corner */}
       <div className="flex justify-end">
-        <div className="h-40 bg-primary w-96 transform skew-x-[25deg] -mr-10 flex justify-center items-center">
-          <h1 className="text-white text-6xl text-center font-semibold -skew-x-[25deg]">
+        <div className="h-40 bg-primary w-96 transform skew-x-[25deg] -mr-10 flex items-center justify-center">
+          <h1 className="text-center text-6xl font-semibold -skew-x-[25deg] text-white">
             GRAM
           </h1>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Login;

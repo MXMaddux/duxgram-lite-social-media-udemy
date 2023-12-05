@@ -27,7 +27,7 @@ const Home = () => {
 
   return (
     <DefaultLayout>
-      <div className="grid grid-cols-4 md:grid-cols-1">
+      <div className="grid grid-cols-4 md:grid-cols-1 space-x-5">
         {data.map((post) => {
           return <Post post={post} />;
         })}

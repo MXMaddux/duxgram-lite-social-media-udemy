@@ -3,9 +3,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CgMenuRightAlt } from "react-icons/cg";
 
 const Header = () => {
-  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("duxgram-lite-user"));
   const location = useLocation();
   const [showMenu, setShowMenu] = useState(false);
+  const navigate = useNavigate();
   const menuItems = [
     {
       title: "Home",
@@ -24,13 +25,13 @@ const Header = () => {
     },
     {
       title: "Profile",
-      path: "/profile",
+      path: `/profile/${user.id}`,
       id: 4,
     },
   ];
 
   return (
-    <div className="p-5 bg-primary rounded rounded-md">
+    <div className="p-3 bg-primary rounded-md">
       {!showMenu && (
         <div className="md:flex justify-end hidden bg-primary -mb-8">
           <CgMenuRightAlt
@@ -41,20 +42,20 @@ const Header = () => {
           />
         </div>
       )}
+
       <div className="flex items-center justify-between">
         <div onClick={() => navigate("/")} className="cursor-pointer">
           <h1 className="text-2xl font-semibold text-white">DUXGRAM</h1>
-          <span className="text-gray-500">
-            {/* {user.email.substring(0, user.email.length - 10)} */}
-          </span>
+          <span className="text-gray-500">{user.email.split("@")[0]}</span>
         </div>
-        {/* Web View */}
+        {/* web view */}
         <div className="flex space-x-10 justify-end items-center md:hidden">
           {menuItems.map((item) => {
             return (
               <Link
+                key={item.id}
                 to={`${item.path}`}
-                className={`text-gray-400 ${
+                className={`text-gray-200 ${
                   item.path == location.pathname &&
                   "bg-white text-black rounded py-1 px-3"
                 }`}
@@ -64,8 +65,18 @@ const Header = () => {
               </Link>
             );
           })}
+          <h1
+            className="text-gray-200 cursor-pointer"
+            onClick={() => {
+              localStorage.removeItem("duxgram-lite-user");
+              navigate("/login");
+            }}
+          >
+            Logout
+          </h1>
         </div>
-        {/* Mobile View */}
+
+        {/* {mobile view} */}
         {showMenu && (
           <div className="md:flex space-x-10 justify-end flex-col items-end space-y-5 hidden">
             {menuItems.map((item) => {
@@ -81,6 +92,15 @@ const Header = () => {
                 </Link>
               );
             })}
+            <h1
+              className="text-gray-200"
+              onClick={() => {
+                localStorage.removeItem("duxgram-lite-user");
+                navigate("/login");
+              }}
+            >
+              Logout
+            </h1>
           </div>
         )}
       </div>

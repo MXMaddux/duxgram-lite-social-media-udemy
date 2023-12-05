@@ -14,7 +14,6 @@ function Register() {
   const { loading } = useSelector((store) => store);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const register = () => {
     const auth = getAuth(app);
     dispatch({ type: "showLoading" });
@@ -24,13 +23,12 @@ function Register() {
         const userData = {
           email: user.email,
           profilePicUrl: "",
-          bio: "Hi , I am using Duxgram-Lite",
+          bio: "Hi , Iam using Duxgram-Lite",
         };
-        console.log(userData);
         setDoc(doc(fireDb, "users", user.uid), userData);
         dispatch({ type: "hideLoading" });
         toast.success("Registration Successfull");
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -65,7 +63,7 @@ function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="email"
-            className="border border-gray-600 h-10 rounded-sm focus:border-gray-600 pl-5 bg-transparent text-gray-400"
+            className="border border-gray-600 h-10 rounded-sm focus:border-gray-500 pl-5 bg-transparent text-gray-400"
           />
           <input
             type="password"
